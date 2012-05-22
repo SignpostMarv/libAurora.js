@@ -9,6 +9,13 @@
 	
 	WebAPI.prototype = new abstractAuthBasicAPI();
 
+	WebAPI.prototype['OnlineStatus'] = function(){
+		this['makeCallToAPI']('OnlineStatus', true, undefined, {
+			'Online'       : {'boolean' : []},
+			'LoginEnabled' : {'boolean' : []}
+		});
+	}
+
 	WebAPI.prototype['_GridInfo'] = undefined;
 	WebAPI.prototype['get_grid_info'] = function(info){
 		var
@@ -38,6 +45,16 @@
 				'result' : {'GridInfo' : obj['_GridInfo']}
 			});
 		}
+	}
+
+	WebAPI.prototype['CheckIfUserExists'] = function(name){
+		this['makeCallToAPI']('CheckIfUserExists', true, {
+			'Name' : name
+		}, {
+			'Verified' : {
+				'boolean' : []
+			}
+		});
 	}
 
 	Addon['WebAPI'] = WebAPI;

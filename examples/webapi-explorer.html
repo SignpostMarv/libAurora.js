@@ -22,29 +22,36 @@ tr > th{
 		submit   = document.createElement('button'),
 		inputs   = [],
 		labels   = [],
+		simpleObjectOutput = function(method, result){
+			var
+				table = document.createElement('table'),
+				caption = document.createElement('caption')
+			;
+			caption.appendChild(document.createTextNode(method));
+			table.appendChild(caption);
+			for(var i in result){
+				var
+					tr = document.createElement('tr'),
+					th = document.createElement('th'),
+					td = document.createElement('td')
+				;
+				th.appendChild(document.createTextNode(i));
+				td.appendChild(document.createTextNode(result[i]));
+				tr.appendChild(th);
+				tr.appendChild(td);
+				table.appendChild(tr);
+			}
+			document.body.appendChild(table);
+		},
+		simpleObjectListener = function(e){
+			simpleObjectOutput(e.type, e.result);
+		},
 		demoResults = function(WebAPI){
 			WebAPI.addListener('get_grid_info', function(e){
-				var
-					result = e.result.GridInfo,
-					table = document.createElement('table'),
-					caption = document.createElement('caption')
-				;
-				caption.appendChild(document.createTextNode('get_grid_info'));
-				table.appendChild(caption);
-				for(var i in result){
-					var
-						tr = document.createElement('tr'),
-						th = document.createElement('th'),
-						td = document.createElement('td')
-					;
-					th.appendChild(document.createTextNode(i));
-					td.appendChild(document.createTextNode(result[i]));
-					tr.appendChild(th);
-					tr.appendChild(td);
-					table.appendChild(tr);
-				}
-				document.body.appendChild(table);
+				simpleObjectOutput(e.type, e.result.GridInfo);
 			});
+			WebAPI.addListener('OnlineStatus', simpleObjectListener);
+			WebAPI.addListener('CheckIfUserExists', simpleObjectListener);
 		}
 	;
 	form.appendChild(fieldset);
@@ -102,6 +109,7 @@ tr > th{
 				array_keys(get_class_methods(Aurora.Addon.abstractAuthBasicAPI))
 			)),
 			defaultArgs = {
+				'CheckIfUserExists' : 'Test User'
 			}
 		;
 		submit.setAttribute('disabled', true);
