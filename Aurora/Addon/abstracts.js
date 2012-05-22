@@ -28,7 +28,10 @@
 				}else if(!is_array(expectedResponse)){
 					throw new TypeError('Expected Response argument must be specified as an array, not ' + typeof(expectedResponse));
 				}
-				expectedResponse['forEach'](function(v, k){
+				array_keys(expectedResponse)['forEach'](function(k){
+					var
+						v = expectedResponse[k]
+					;
 					if(!(k in result)){
 						throw new Error('Call to API was successful, but required response properties were missing.');
 					}else if(array_keys(v)['indexOf'](typeof(result[k])) < 0){
@@ -167,8 +170,8 @@
 			authTried = false
 		;
 		if(!!readOnly){
-			args['forEach'](function(v, k){
-				args[k] = JSON['stringify'](v);
+			array_keys(args)['forEach'](function(k){
+				args[k] = JSON['stringify'](args[k]);
 			});
 		}
 		ch['open'](
