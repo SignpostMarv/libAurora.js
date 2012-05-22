@@ -8,6 +8,7 @@
 	;
 	
 	WebAPI.prototype = new abstractAuthBasicAPI();
+	WebAPI.prototype['constructor'] = WebAPI;
 
 	WebAPI.prototype['OnlineStatus'] = function(){
 		this['makeCallToAPI']('OnlineStatus', true, undefined, {
