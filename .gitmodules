@@ -1,0 +1,6 @@
+[submodule "libs/phpjs"]
+	path = libs/phpjs
+	url = git://github.com/SignpostMarv/phpjs.git
+[submodule "libs/EventTarget.js"]
+	path = libs/EventTarget.js
+	url = git://github.com/SignpostMarv/EventTarget.js.git
