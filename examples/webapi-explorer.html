@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>libAurora.js</title>
+<meta charset="UTF-8" />
+<script src="../build/libAurora.min.js"></script>
+<style>
+tr > th{
+	text-align: right ;
+}
+</style>
+</head>
+<body>
+<h1>Aurora WebAPI Explorer</h1>
+<p>JavaScript must be enabled on this page.</p>
+<script>
+	var
+		form     = document.createElement('form'),
+		fieldset = document.createElement('fieldset'),
+		legend   = document.createElement('legend'),
+		ol       = document.createElement('ol'),
+		submit   = document.createElement('button'),
+		inputs   = [],
+		labels   = [],
+		demoResults = function(WebAPI){
+			WebAPI.addListener('get_grid_info', function(e){
+				var
+					result = e.result.GridInfo,
+					table = document.createElement('table'),
+					caption = document.createElement('caption')
+				;
+				caption.appendChild(document.createTextNode('get_grid_info'));
+				table.appendChild(caption);
+				for(var i in result){
+					var
+						tr = document.createElement('tr'),
+						th = document.createElement('th'),
+						td = document.createElement('td')
+					;
+					th.appendChild(document.createTextNode(i));
+					td.appendChild(document.createTextNode(result[i]));
+					tr.appendChild(th);
+					tr.appendChild(td);
+					table.appendChild(tr);
+				}
+				document.body.appendChild(table);
+			});
+		}
+	;
+	form.appendChild(fieldset);
+	fieldset.appendChild(legend);
+	fieldset.appendChild(ol);
+	fieldset.appendChild(submit);
+
+	for(var i=0;i<3;++i){
+		labels.push(document.createElement('label'));
+		inputs.push(document.createElement('input'));
+	}
+
+	inputs[0].setAttribute('type', 'url');
+	inputs[0].setAttribute('placeholder', 'http://localhost:8007/webapi');
+	inputs[0].setAttribute('id', uniqid('api_endpoint_'));
+	labels[0].appendChild(document.createTextNode('API End Point'));
+
+	inputs[1].setAttribute('placeholder', 'Test User');
+	inputs[1].setAttribute('id', uniqid('api_username_'));
+	labels[1].appendChild(document.createTextNode('Username'));
+
+	inputs[2].setAttribute('id', uniqid('api_accesstoken_'));
+	labels[2].appendChild(document.createTextNode('Access Token'));
+	
+	for(var i=0;i<labels.length;++i){
+		var
+			li = document.createElement('li')
+		;
+		labels[i].setAttribute('for', inputs[i].id);
+		inputs[i].setAttribute('required', true);
+		li.appendChild(labels[i]);
+		li.appendChild(inputs[i]);
+		ol.appendChild(li);
+	}
+	
+	legend.appendChild(document.createTextNode('Aurora WebAPI Access Credentials (not your login credentials)'));
+	
+	submit.appendChild(document.createTextNode('Connect'));
+	submit.setAttribute('type', 'submit');
+	
+	document.body.removeChild(document.body.getElementsByTagName('p')[0]);
+	document.body.appendChild(form);
+
+	form.addEventListener('submit', function(e){
+		var
+			nav         = document.createElement('nav'),
+			ol          = document.createElement('ol'),
+			WebAPI      = new Aurora.Addon.WebAPI(
+				inputs[0].value,
+				inputs[1].value,
+				inputs[2].value
+			),
+			supported   = array_values(array_diff(
+				array_keys(get_class_methods(WebAPI)),
+				array_keys(get_class_methods(Aurora.Addon.abstractAuthBasicAPI))
+			)),
+			defaultArgs = {
+			}
+		;
+		submit.setAttribute('disabled', true);
+		demoResults(WebAPI);
+		
+		for(var i=0;i<supported.length;++i){
+			var
+				li = document.createElement('li')
+			;
+			li.appendChild(document.createTextNode(supported[i]));
+			ol.appendChild(li);
+		}
+		nav.appendChild(ol);
+		document.body.appendChild(nav);
+		ol.addEventListener('click', function(e){
+			if(e.target.nodeName == 'LI'){
+				WebAPI[e.target.textContent].call(WebAPI, defaultArgs[e.target.textContent]);
+			}
+		}, true);
+	
+		e.stopPropagation();
+		e.preventDefault();
+		return false;
+	}, true);
+
+</script>
+</body>
+</html>
