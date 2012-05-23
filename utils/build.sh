@@ -21,7 +21,7 @@ rm -f ../build/*.js ../build/*.js.gz
 cat ../libs/phpjs/functions/classobj/get_class_methods.js ../libs/phpjs/functions/misc/uniqid.js ../libs/phpjs/functions/array/array_diff.js ../libs/phpjs/functions/array/array_keys.js ../libs/phpjs/functions/array/array_values.js ../libs/phpjs/functions/var/is_array.js ../libs/phpjs/functions/url/base64_encode.js ../libs/phpjs/functions/xml/utf8_encode.js ../libs/phpjs/functions/strings/md5.js ../libs/phpjs/functions/url/urlencode.js ../libs/phpjs/functions/url/http_build_query.js > ../build/phpjs-deps.js
 
 # concatenate required libs and libAurora.js files
-cat ../libs/EventTarget.js/EventTarget.js ../build/phpjs-deps.js ../Aurora/Addon/abstracts.js ../Aurora/Addon/WebAPI.js > ../build/libAurora.js
+cat ../libs/EventTarget.js/EventTarget.js ../build/phpjs-deps.js ../LICENSE.js ../Aurora/Addon/abstracts.js ../Aurora/Addon/WebAPI.js > ../build/libAurora.js
 
 # if the closure compiler is present, minify javascript
 if [ -f ../../compiler.jar ];

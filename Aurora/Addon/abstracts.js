@@ -1,8 +1,3 @@
-/**
-* @license libAurora.js Copyright (c) 2011-2012 Contributors
-* See CONTRIBUTORS.TXT for a full list of copyright holders.
-* MIT License
-*/
 (function(window, document, undefined){
 	var
 		EventTarget      = window['EventTarget'],
